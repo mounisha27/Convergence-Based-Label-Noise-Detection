@@ -24,8 +24,11 @@ Each hypothesis has its own self-contained folder, including its own copies of t
 Random noise injected into the **negative** (minority) class.
 - `noise_balancing_experiment_v2.py` — main experiment script
 - `noise_injection.py` — shared utility: injects random label noise
+- `visualize_results.py` — plotting utilities used to generate result charts
 - `noise_balancing_results.csv` — full per-method results
 - `convergence_scores_all_variants.csv` — computed CV scores (3 variants)
+- `h1_class_shift.png` — training class distribution chart across noise levels
+- `test.py` — quick diagnostic script for confirming dataset load
 
 ### `H2_systematic_Noise_Experiment/`
 Systematic noise injected into the negative class, compared against
@@ -85,5 +88,6 @@ Each script prints progress to the console (dataset loading, deduplication, nois
 saves its result CSVs into the same folder.
 
 ## License
+The code in this repository is released under the MIT License — see the LICENSE file for details. The Amazon review dataset itself is distributed separately by Datafiniti via Kaggle under its own license terms; this repository does not redistribute the raw data.
 
-The code in this repository is released under the MIT License. The Amazon review dataset itself is distributed separately by Datafiniti via Kaggle under its own license terms; this repository does not redistribute the raw data. the `LICENSE` file for details. The Amazon review dataset itself is distributed separately by Datafiniti via Kaggle under its own license terms; this repository does not redistribute the raw data.
+The code in this repository is released under the MIT License — see the `LICENSE` file for details. The Amazon review dataset itself is distributed separately by Datafiniti via Kaggle under its own license terms; this repository does not redistribute the raw data.
