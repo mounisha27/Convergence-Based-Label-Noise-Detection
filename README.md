@@ -88,6 +88,4 @@ Each script prints progress to the console (dataset loading, deduplication, nois
 saves its result CSVs into the same folder.
 
 ## License
-The code in this repository is released under the MIT License — see the LICENSE file for details. The Amazon review dataset itself is distributed separately by Datafiniti via Kaggle under its own license terms; this repository does not redistribute the raw data.
-
 The code in this repository is released under the MIT License — see the `LICENSE` file for details. The Amazon review dataset itself is distributed separately by Datafiniti via Kaggle under its own license terms; this repository does not redistribute the raw data.
