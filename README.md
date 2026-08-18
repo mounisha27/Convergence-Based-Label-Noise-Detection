@@ -55,16 +55,28 @@ the H3 class-size sweep.
 - `h3c_neutral_noise_results.csv` — full per-method results
 - `h3c_neutral_convergence_cv.csv` — computed CV scores
 
-Each `*_test.py` / `noise_balancing_experiment_*.py` script is
-self-contained: it loads and preprocesses the dataset, injects noise at four rates (0%, 10%, 25%, 40%), runs the full balancing-method grid
+### `H4_Cleanlab_Benchmark/`
+Controlled comparison between the CV convergence signal and confident
+learning (`cleanlab`), with ground-truth precision/recall scoring since
+noise is injected by us rather than naturally occurring.
+- `cleanlab_vs_cv_benchmark.py` — main experiment script
+- `noise_injection.py` — shared utility: injects random label noise
+- `cleanlab_vs_cv_comparison.csv` — full comparison results (precision,
+  recall, F1, and wall-clock timing for both methods, at 10%, 25%, and
+  40% noise rates)
+
+Each `*_test.py` / `noise_balancing_experiment_*.py` / `cleanlab_vs_cv_benchmark.py` script is
+self-contained: it loads and preprocesses the dataset, injects noise at four rates (0%, 10%, 25%, 40% — three rates for H4), runs the full balancing-method grid
 (None, ROS, RUS, SMOTE, ADASYN, Borderline-SMOTE) across two models (SVM, Neural Network), and saves both the full per-method results and
-the computed CV convergence scores to CSV.
+the computed CV convergence scores to CSV. H4 additionally runs `cleanlab`'s confident learning detector on the same noisy data for direct comparison.
 
 ## Requirements
 
 ```bash
-pip install pandas numpy scikit-learn imbalanced-learn nltk textblob matplotlib
+pip install pandas numpy scikit-learn imbalanced-learn nltk textblob matplotlib cleanlab
 ```
+
+(`cleanlab` is only required for the `H4_Cleanlab_Benchmark/` folder.)
 
 ## Running the Experiments
 
@@ -82,10 +94,14 @@ python H3_Positive_Class_test.py
 
 cd ../H3c_Noise_experiment_Neutral_Class
 python H3_Neutral_Class_test.py
+
+cd ../H4_Cleanlab_Benchmark
+python cleanlab_vs_cv_benchmark.py
 ```
 
 Each script prints progress to the console (dataset loading, deduplication, noise verification, per-model fitting progress) and
 saves its result CSVs into the same folder.
 
 ## License
+
 The code in this repository is released under the MIT License — see the `LICENSE` file for details. The Amazon review dataset itself is distributed separately by Datafiniti via Kaggle under its own license terms; this repository does not redistribute the raw data.
