@@ -3,8 +3,13 @@
 Code and results for a case study testing whether disagreement between resampling techniques (Coefficient of Variation, or CV, across
 methods) reliably tracks injected label noise, across different noise types and target-class sizes, in a text sentiment classification task.
 
-This repository accompanies a manuscript currently under review, extending an earlier case study from a single observed instance to a
-systematically tested, statistically validated pattern.
+This repository accompanies the preprint **"From One Case to a Pattern: Convergence-Based Label Noise Detection Across Noise Types and Class Sizes"**
+(Roy, 2026), available at [https://doi.org/10.5281/zenodo.23158886](https://doi.org/10.5281/zenodo.23158886). It extends an earlier case study
+([DOI: 10.5281/zenodo.21908043](https://doi.org/10.5281/zenodo.21908043)) from a single observed instance to a systematically tested,
+statistically validated pattern.
+
+Paper section → folder: H1 (Section 4.1), H2 (4.2), H3 (4.3), H4 (4.4), **H5 (4.5, representation generalization)**. A supplementary
+fine-tuning run mentioned in Section 3.8 is in `Supplementary_Finetuned_DistilBERT/`.
 
 ## Dataset
 
@@ -41,6 +46,23 @@ Each hypothesis has an original single-run experiment folder, and, where complet
 
 **`H4_multiseed_validation/`** — The confident learning comparison repeated across 5 seeds, confirming both CV and confident learning's precision increase with noise in a statistically robust way, while recall remains flat.
 
+### Representation generalization (paper Section 4.5, H5)
+
+**`H5_Representation_Shift/`** — Tests whether the CV diagnostic depends on sparse TF-IDF features, using three feature conditions with everything else held fixed (random noise, negative class, five resampling methods — None, ROS, SMOTE, ADASYN, Borderline-SMOTE — two models, 5 seeds): (A) TF-IDF at 2,500 dimensions, (B) the same TF-IDF reduced to 384 dimensions with TruncatedSVD (isolates dimensionality), and (C) `all-MiniLM-L6-v2` sentence embeddings at their native 384 dimensions (isolates semantic density). CV is reported alongside raw standard deviation and spread (max − min), since a higher baseline recall can shrink CV even when absolute disagreement is unchanged.
+- `h5_representation_shift.py` — main experiment script
+- `noise_injection.py` — shared utility: injects random label noise
+- `h5_representation_shift_full_results.csv` — per-seed, per-method recall (600 rows)
+- `h5_representation_shift_decomposed.csv` — per-seed mean, std, spread, and CV
+- `h5_ci_CV.csv`, `h5_ci_std_recall.csv`, `h5_ci_spread.csv` — 95% confidence intervals (t-distribution) for each metric
+- `h5_per_resampler_breakdown.csv` — mean recall for each individual resampling method
+
+### Supplementary: fine-tuned transformer run (not a result of the paper)
+
+**`Supplementary_Finetuned_DistilBERT/`** — A supplementary run (disclosed in Section 3.8 of the paper) that fine-tunes DistilBERT with class-weighted loss under the same noise-injection protocol (3 seeds). Because resampling operates on fixed feature vectors and fine-tuning updates weights from raw text, the five-method comparison cannot be reproduced here, so **this run does not test the CV diagnostic itself**; it only records how a single fine-tuned classifier's target-class recall behaves under injected noise.
+- `finetuned_distilbert.py` — fine-tuning script
+- `noise_injection.py` — shared utility
+- `finetuned_distilbert_results.csv` — recall, precision, and F1 per seed and noise rate
+
 Each script prints progress to the console (dataset loading, deduplication, noise verification, per-model fitting progress) and saves both full per-seed results and computed confidence intervals to CSV.
 
 ## Requirements
@@ -50,6 +72,13 @@ pip install pandas numpy scikit-learn imbalanced-learn nltk textblob matplotlib 
 ```
 
 (`cleanlab` is only required for the H4 folders.)
+
+The H5 and supplementary folders additionally need:
+
+```bash
+pip install sentence-transformers transformers torch
+```
+(`sentence-transformers` for H5, `transformers` and `torch` for the fine-tuning run. The first run downloads the pretrained models automatically.)
 
 ## Running the Experiments
 
@@ -68,9 +97,25 @@ cd ../H1_Multiseed_Validation && python h1_multiseed_validation.py
 cd ../H2_Multiseed_validation_systematic_noise && python h2_multiseed_validation.py
 cd ../H3_multiseed_validation && python h3_multiseed_validation.py
 cd ../H4_multiseed_validation && python h4_multiseed_validation.py
+
+# Representation generalization (paper Section 4.5) and supplementary fine-tuning run
+cd ../H5_Representation_Shift && python h5_representation_shift.py
+cd ../Supplementary_Finetuned_DistilBERT && python finetuned_distilbert.py
 ```
 
-**Note on runtime:** the multi-seed validation scripts repeat the full experimental grid 5–10 times each and can take several hours to run on a standard machine without GPU acceleration. `H3_multiseed_validation.py` runs both the positive- and neutral-class sweeps sequentially in one script and is the longest, typically taking the better part of a day.
+**Note on runtime:** the multi-seed validation scripts repeat the full experimental grid 5–10 times each and can take several hours to run on a standard machine without GPU acceleration. `H3_multiseed_validation.py` runs both the positive- and neutral-class sweeps sequentially in one script and is the longest, typically taking the better part of a day. All timings below are from a CPU-only personal computer (no GPU): `h5_representation_shift.py` took roughly 14 hours in total (3 feature conditions × 5 seeds), and the supplementary fine-tuning run took roughly 6 hours per noise-rate run, about 72 hours in total (3 seeds × 4 noise rates), so budget accordingly or reduce `SEEDS` at the top of each script's `main()`.
+
+## Citation
+
+```bibtex
+@misc{roy2026convergence,
+  title  = {From One Case to a Pattern: Convergence-Based Label Noise Detection Across Noise Types and Class Sizes},
+  author = {Roy, Mounisha},
+  year   = {2026},
+  doi    = {10.5281/zenodo.23158886},
+  note   = {Preprint}
+}
+```
 
 ## License
 
