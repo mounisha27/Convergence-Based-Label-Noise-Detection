@@ -4,9 +4,9 @@ Code and results for a case study testing whether disagreement between resamplin
 methods) reliably tracks injected label noise, across different noise types and target-class sizes, in a text sentiment classification task.
 
 This repository accompanies the preprint **"From One Case to a Pattern: Convergence-Based Label Noise Detection Across Noise Types and Class Sizes"**
-(Roy, 2026), available at [https://doi.org/10.5281/zenodo.23158886](https://doi.org/10.5281/zenodo.23158886). It extends an earlier case study
+(Roy, 2026), available at [https://doi.org/10.5281/zenodo.23184123](https://doi.org/10.5281/zenodo.23184123). It extends an earlier case study
 ([DOI: 10.5281/zenodo.21908043](https://doi.org/10.5281/zenodo.21908043)) from a single observed instance to a systematically tested,
-statistically validated pattern.
+statistically validated pattern..
 
 Paper section → folder: H1 (Section 4.1), H2 (4.2), H3 (4.3), H4 (4.4), **H5 (4.5, representation generalization)**. A supplementary
 fine-tuning run mentioned in Section 3.8 is in `Supplementary_Finetuned_DistilBERT/`.
@@ -112,7 +112,7 @@ cd ../Supplementary_Finetuned_DistilBERT && python finetuned_distilbert.py
   title  = {From One Case to a Pattern: Convergence-Based Label Noise Detection Across Noise Types and Class Sizes},
   author = {Roy, Mounisha},
   year   = {2026},
-  doi    = {10.5281/zenodo.23158886},
+  doi    = {10.5281/zenodo.23184123},
   note   = {Preprint}
 }
 ```
